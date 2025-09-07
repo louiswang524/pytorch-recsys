@@ -11,6 +11,24 @@ from __future__ import annotations
 
 from typing import List
 
+# Import base classes and registry
+from .base import BaseSequentialModel, ModelConfig
+from .registry import ModelRegistry, ModelMetadata, create_model
+
+# Import mock models (this will trigger registration)
+from .mock import MockSequentialModel, SimpleMockModel
+
 __all__: List[str] = [
-    # Will be populated as models are implemented
+    # Base interfaces
+    "BaseSequentialModel",
+    "ModelConfig",
+    
+    # Registry system
+    "ModelRegistry", 
+    "ModelMetadata",
+    "create_model",
+    
+    # Mock implementations
+    "MockSequentialModel",
+    "SimpleMockModel",
 ]
