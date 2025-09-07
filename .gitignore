@@ -86,6 +86,7 @@ wandb/
 # Data
 data/
 datasets/
+!pytorch_recsys/data/
 *.csv
 *.json
 *.parquet
@@ -97,6 +98,7 @@ datasets/
 # Models
 models/
 saved_models/
+!pytorch_recsys/models/
 *.pkl
 *.joblib
 

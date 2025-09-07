@@ -1,0 +1,34 @@
+# Include documentation and configuration files
+include README.md
+include LICENSE
+include CHANGELOG.md
+include requirements*.txt
+include pyproject.toml
+include MANIFEST.in
+
+# Include package data
+recursive-include pytorch_recsys *.yaml *.yml *.json *.toml
+recursive-include pytorch_recsys/configs *.yaml *.yml *.json
+
+# Include example configurations and scripts
+recursive-include examples *.py *.yaml *.yml *.json *.md
+recursive-include examples *.ipynb
+
+# Include documentation source
+recursive-include docs *.rst *.md *.py *.txt *.bat
+recursive-include docs Makefile
+recursive-include docs *.png *.jpg *.gif *.svg
+
+# Exclude development and testing files
+recursive-exclude tests *
+recursive-exclude .* *
+exclude .gitignore .pre-commit-config.yaml
+exclude tox.ini pytest.ini mypy.ini
+exclude *.log
+exclude .coverage
+recursive-exclude htmlcov *
+recursive-exclude .pytest_cache *
+recursive-exclude .mypy_cache *
+recursive-exclude __pycache__ *
+global-exclude *.pyc
+global-exclude *.pyo
