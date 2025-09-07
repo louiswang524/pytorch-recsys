@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 > Think carefully and implement the most concise solution that changes as little code as possible.
 
 ## USE SUB-AGENTS FOR CONTEXT OPTIMIZATION
@@ -63,3 +65,76 @@ Using the test-runner agent ensures:
 - NO OVER-ENGINEERING - Don't add unnecessary abstractions, factory patterns, or middleware when simple functions would work. Don't think "enterprise" when you need "working"
 - NO MIXED CONCERNS - Don't put validation logic inside API handlers, database queries inside UI components, etc. instead of proper separation
 - NO RESOURCE LEAKS - Don't forget to close database connections, clear timeouts, remove event listeners, or clean up file handles
+
+## CODEBASE ARCHITECTURE
+
+This is the **Claude Code Project Management (CCPM) system** - a workflow management tool that transforms PRDs into GitHub issues and coordinates parallel AI agents.
+
+### Core Architecture
+
+```
+CCPM Workflow Flow
+├── PRD Creation (.claude/prds/) → Brainstorming and requirements
+├── Epic Planning (.claude/epics/) → Implementation breakdown
+├── GitHub Sync → Issues as single source of truth  
+└── Parallel Execution → Multiple agents in Git worktrees
+```
+
+### Key Components
+
+1. **Command System** (`.claude/commands/pm/`): Structured workflow commands
+   - `/pm:prd-new` - Create comprehensive PRDs through guided brainstorming
+   - `/pm:epic-oneshot` - Transform PRD → Epic → GitHub Issues in one command
+   - `/pm:issue-start` - Launch specialized agents for implementation
+   - `/pm:next` - Intelligent prioritization of next tasks
+
+2. **Agent Coordination**: Context-preserving sub-agents work in parallel
+   - Each agent operates in isolation to prevent context pollution
+   - Agents coordinate through Git commits and GitHub issue updates
+   - Main conversation stays strategic, not bogged down in implementation details
+
+3. **GitHub Integration**: Uses `gh-sub-issue` extension for parent-child relationships
+   - Epic issues track sub-task completion automatically
+   - Issues serve as the single source of truth for project state
+   - Comments provide full audit trail from requirements to code
+
+### Important Directories
+
+- `.claude/commands/pm/` - Project management workflow definitions
+- `.claude/agents/` - Specialized context-preserving agents
+- `.claude/scripts/pm/` - Shell script implementations of PM commands
+- `.claude/epics/` - Local epic workspace (should be in .gitignore)
+- `.claude/prds/` - Product requirements documents
+- `.claude/context/` - Project-wide context files
+
+### Common Commands
+
+```bash
+# Initial setup
+/pm:init                    # Install GitHub CLI, authenticate, setup extensions
+
+# Feature development workflow  
+/pm:prd-new feature-name    # Create PRD through guided brainstorming
+/pm:epic-oneshot feature-name # Transform PRD → Epic → GitHub Issues
+/pm:issue-start 1234        # Launch agent to implement specific issue
+/pm:next                    # Get next priority task with context
+
+# Status and coordination
+/pm:status                  # Overall project dashboard  
+/pm:epic-show feature-name  # Display epic progress and tasks
+/pm:issue-sync 1234        # Push local progress to GitHub
+```
+
+### Testing
+
+- No traditional test framework - this is a workflow management system
+- Validation happens through GitHub issue lifecycle and agent coordination
+- Use `/pm:validate` to check system integrity
+- Monitor agent execution through GitHub issue comments
+
+### Unique Patterns
+
+- **Spec-driven development**: Every code change traces back to documented requirements
+- **Parallel agent execution**: Multiple AI agents work simultaneously on different aspects  
+- **Context firewalls**: Agents prevent implementation details from polluting main conversation
+- **GitHub as database**: No separate PM tools - GitHub Issues are the project state
