@@ -161,7 +161,9 @@ class ModelRegistry:
         """
         # Validate model name
         if not name or not isinstance(name, str):
-            raise ValueError(f"Model name must be a non-empty string, got: {name}")
+            raise ValueError(
+                f"Model name must be a non-empty string, got: {name}"
+            )
 
         if name in cls._models:
             existing_version = cls._models[name].version
@@ -206,7 +208,9 @@ class ModelRegistry:
         )
 
     @classmethod
-    def create_model(cls, name: str, config: DictConfig) -> BaseSequentialModel:
+    def create_model(
+        cls, name: str, config: DictConfig
+    ) -> BaseSequentialModel:
         """Create model instance from configuration.
 
         Args:
@@ -233,7 +237,9 @@ class ModelRegistry:
         """
         if name not in cls._models:
             available = list(cls._models.keys())
-            raise ValueError(f"Model '{name}' not found. Available models: {available}")
+            raise ValueError(
+                f"Model '{name}' not found. Available models: {available}"
+            )
 
         metadata = cls._models[name]
         model_class = metadata.model_class
@@ -263,7 +269,9 @@ class ModelRegistry:
         """
         if name not in cls._models:
             available = list(cls._models.keys())
-            raise ValueError(f"Model '{name}' not found. Available models: {available}")
+            raise ValueError(
+                f"Model '{name}' not found. Available models: {available}"
+            )
 
         return cls._models[name].model_class
 
@@ -282,7 +290,9 @@ class ModelRegistry:
         """
         if name not in cls._models:
             available = list(cls._models.keys())
-            raise ValueError(f"Model '{name}' not found. Available models: {available}")
+            raise ValueError(
+                f"Model '{name}' not found. Available models: {available}"
+            )
 
         metadata = cls._models[name]
         return {
@@ -297,7 +307,9 @@ class ModelRegistry:
         }
 
     @classmethod
-    def list_models(cls, tags: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+    def list_models(
+        cls, tags: Optional[List[str]] = None
+    ) -> List[Dict[str, Any]]:
         """List all registered models with optional tag filtering.
 
         Args:

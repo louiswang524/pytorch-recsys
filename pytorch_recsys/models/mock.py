@@ -73,7 +73,9 @@ class MockSequentialModel(BaseSequentialModel):
     def _build_model(self) -> None:
         """Build the mock model architecture."""
         # Positional embeddings
-        self.position_embeddings = nn.Embedding(self.max_seq_len, self.embedding_dim)
+        self.position_embeddings = nn.Embedding(
+            self.max_seq_len, self.embedding_dim
+        )
 
         # Simple transformer-like encoder
         self.encoder_layers = nn.ModuleList(
@@ -96,7 +98,9 @@ class MockSequentialModel(BaseSequentialModel):
         self.dropout = nn.Dropout(self.dropout_rate)
 
         # Output projection
-        self.output_projection = nn.Linear(self.embedding_dim, self.num_items + 1)
+        self.output_projection = nn.Linear(
+            self.embedding_dim, self.num_items + 1
+        )
 
         # Initialize weights
         self._init_weights()
@@ -148,7 +152,8 @@ class MockSequentialModel(BaseSequentialModel):
         for layer in self.encoder_layers:
             # Create causal attention mask
             causal_mask = torch.triu(
-                torch.ones(seq_len, seq_len, device=sequences.device), diagonal=1
+                torch.ones(seq_len, seq_len, device=sequences.device),
+                diagonal=1,
             ).bool()
 
             # Apply padding mask
@@ -255,7 +260,9 @@ class MockSequentialModel(BaseSequentialModel):
         )
 
         # Make it causal (lower triangular)
-        mask = torch.tril(torch.ones(seq_len, seq_len, device=sequences.device))
+        mask = torch.tril(
+            torch.ones(seq_len, seq_len, device=sequences.device)
+        )
         attention_weights = attention_weights * mask
 
         # Normalize
@@ -280,7 +287,9 @@ class MockSequentialModel(BaseSequentialModel):
             String summary of the model
         """
         total_params = sum(p.numel() for p in self.parameters())
-        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        trainable_params = sum(
+            p.numel() for p in self.parameters() if p.requires_grad
+        )
 
         summary = f"""
 MockSequentialModel Summary:
@@ -333,7 +342,9 @@ class SimpleMockModel(BaseSequentialModel):
         embeddings = self.dropout(embeddings)
 
         # Linear transformation to logits
-        logits = self.linear(embeddings)  # (batch_size, seq_len, num_items + 1)
+        logits = self.linear(
+            embeddings
+        )  # (batch_size, seq_len, num_items + 1)
 
         return logits
 

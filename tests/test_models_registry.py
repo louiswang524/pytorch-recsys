@@ -9,7 +9,11 @@ import torch
 from omegaconf import DictConfig
 from unittest.mock import patch
 
-from pytorch_recsys.models.registry import ModelRegistry, ModelMetadata, create_model
+from pytorch_recsys.models.registry import (
+    ModelRegistry,
+    ModelMetadata,
+    create_model,
+)
 from pytorch_recsys.models.base import BaseSequentialModel
 from pytorch_recsys.models.mock import MockSequentialModel, SimpleMockModel
 
@@ -18,7 +22,9 @@ class DummyModel(BaseSequentialModel):
     """Dummy model for testing registry functionality."""
 
     def forward(self, sequences, **kwargs):
-        return torch.randn(sequences.shape[0], sequences.shape[1], self.num_items + 1)
+        return torch.randn(
+            sequences.shape[0], sequences.shape[1], self.num_items + 1
+        )
 
     def predict_next_items(self, sequences, k=10):
         batch_size = sequences.shape[0]
@@ -58,7 +64,9 @@ class TestModelRegistry:
                 )
 
             def predict_next_items(self, sequences, k=10):
-                return torch.randint(1, self.num_items + 1, (sequences.shape[0], k))
+                return torch.randint(
+                    1, self.num_items + 1, (sequences.shape[0], k)
+                )
 
             def compute_loss(self, logits, targets):
                 return torch.tensor(0.5)
@@ -99,7 +107,9 @@ class TestModelRegistry:
         class FirstModel(DummyModel):
             pass
 
-        with patch("pytorch_recsys.models.registry.logger.warning") as mock_warning:
+        with patch(
+            "pytorch_recsys.models.registry.logger.warning"
+        ) as mock_warning:
 
             @ModelRegistry.register(name="duplicate_test", version="2.0.0")
             class SecondModel(DummyModel):
@@ -107,26 +117,35 @@ class TestModelRegistry:
 
             mock_warning.assert_called_once()
             # Second model should override first
-            assert ModelRegistry.get_model_info("duplicate_test")["version"] == "2.0.0"
+            assert (
+                ModelRegistry.get_model_info("duplicate_test")["version"]
+                == "2.0.0"
+            )
 
     def test_invalid_model_registration(self):
         """Test registration of invalid models raises errors."""
         # Test non-BaseSequentialModel class
-        with pytest.raises(TypeError, match="must inherit from BaseSequentialModel"):
+        with pytest.raises(
+            TypeError, match="must inherit from BaseSequentialModel"
+        ):
 
             @ModelRegistry.register(name="invalid_model")
             class InvalidModel:
                 pass
 
         # Test empty name
-        with pytest.raises(ValueError, match="Model name must be a non-empty string"):
+        with pytest.raises(
+            ValueError, match="Model name must be a non-empty string"
+        ):
 
             @ModelRegistry.register(name="")
             class EmptyNameModel(DummyModel):
                 pass
 
         # Test non-string name
-        with pytest.raises(ValueError, match="Model name must be a non-empty string"):
+        with pytest.raises(
+            ValueError, match="Model name must be a non-empty string"
+        ):
 
             @ModelRegistry.register(name=123)
             class NumericNameModel(DummyModel):
@@ -186,7 +205,9 @@ class TestModelRegistry:
             {"num_items": 1000, "max_seq_len": 50, "embedding_dim": 128}
         )
 
-        with pytest.raises(TypeError, match="Failed to create model 'failing_model'"):
+        with pytest.raises(
+            TypeError, match="Failed to create model 'failing_model'"
+        ):
             ModelRegistry.create_model("failing_model", config)
 
     def test_get_model_class(self):
@@ -345,7 +366,9 @@ class TestModelRegistry:
         class RequirementsTestModel(DummyModel):
             pass
 
-        validation_results = ModelRegistry.validate_requirements("requirements_test")
+        validation_results = ModelRegistry.validate_requirements(
+            "requirements_test"
+        )
 
         assert "torch" in validation_results
         assert "pytorch-lightning" in validation_results
@@ -473,14 +496,18 @@ class TestMockModelRegistration:
         # Test mock model info
         mock_info = ModelRegistry.get_model_info("mock_model")
         assert (
-            mock_info["description"] == "Simple mock model for testing and development"
+            mock_info["description"]
+            == "Simple mock model for testing and development"
         )
         assert "mock" in mock_info["tags"]
         assert "testing" in mock_info["tags"]
 
         # Test simple mock info
         simple_info = ModelRegistry.get_model_info("simple_mock")
-        assert simple_info["description"] == "Even simpler mock model for basic testing"
+        assert (
+            simple_info["description"]
+            == "Even simpler mock model for basic testing"
+        )
         assert "simple" in simple_info["tags"]
 
     def test_create_mock_models(self):

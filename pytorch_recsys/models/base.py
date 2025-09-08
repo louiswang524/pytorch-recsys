@@ -25,15 +25,21 @@ class ModelConfig(BaseModel):
     """
 
     # Core model parameters
-    num_items: int = Field(..., gt=0, description="Number of items in the catalog")
+    num_items: int = Field(
+        ..., gt=0, description="Number of items in the catalog"
+    )
     num_users: Optional[int] = Field(
         None, gt=0, description="Number of users (optional)"
     )
-    max_seq_len: int = Field(..., gt=0, le=10000, description="Maximum sequence length")
+    max_seq_len: int = Field(
+        ..., gt=0, le=10000, description="Maximum sequence length"
+    )
     embedding_dim: int = Field(..., gt=0, description="Embedding dimension")
 
     # Training parameters
-    learning_rate: float = Field(0.001, gt=0, le=1.0, description="Learning rate")
+    learning_rate: float = Field(
+        0.001, gt=0, le=1.0, description="Learning rate"
+    )
     weight_decay: float = Field(
         0.0, ge=0, le=1.0, description="L2 regularization weight"
     )
@@ -54,7 +60,9 @@ class ModelConfig(BaseModel):
         if v <= 0:
             raise ValueError("max_seq_len must be positive")
         if v > 10000:
-            raise ValueError("max_seq_len cannot exceed 10000 for memory efficiency")
+            raise ValueError(
+                "max_seq_len cannot exceed 10000 for memory efficiency"
+            )
         return v
 
     @validator("embedding_dim")
@@ -168,7 +176,8 @@ class BaseSequentialModel(pl.LightningModule, ABC):
 
         if loss_type == "cross_entropy":
             self.loss_fn = nn.CrossEntropyLoss(
-                ignore_index=0, label_smoothing=label_smoothing  # Ignore padding tokens
+                ignore_index=0,
+                label_smoothing=label_smoothing,  # Ignore padding tokens
             )
         else:
             raise ValueError(f"Unsupported loss type: {loss_type}")
@@ -213,7 +222,9 @@ class BaseSequentialModel(pl.LightningModule, ABC):
         """
         pass
 
-    def training_step(self, batch: Dict[str, Tensor], batch_idx: int) -> Tensor:
+    def training_step(
+        self, batch: Dict[str, Tensor], batch_idx: int
+    ) -> Tensor:
         """Standard training step implementation.
 
         Args:
@@ -233,11 +244,15 @@ class BaseSequentialModel(pl.LightningModule, ABC):
         loss = self.compute_loss(logits, targets)
 
         # Log metrics
-        self.log("train_loss", loss, on_step=True, on_epoch=True, prog_bar=True)
+        self.log(
+            "train_loss", loss, on_step=True, on_epoch=True, prog_bar=True
+        )
 
         return loss
 
-    def validation_step(self, batch: Dict[str, Tensor], batch_idx: int) -> Tensor:
+    def validation_step(
+        self, batch: Dict[str, Tensor], batch_idx: int
+    ) -> Tensor:
         """Standard validation step implementation.
 
         Args:
@@ -261,7 +276,9 @@ class BaseSequentialModel(pl.LightningModule, ABC):
 
         return loss
 
-    def test_step(self, batch: Dict[str, Tensor], batch_idx: int) -> Dict[str, Tensor]:
+    def test_step(
+        self, batch: Dict[str, Tensor], batch_idx: int
+    ) -> Dict[str, Tensor]:
         """Standard test step implementation.
 
         Args:
@@ -286,7 +303,11 @@ class BaseSequentialModel(pl.LightningModule, ABC):
         # Log metrics
         self.log("test_loss", loss, on_step=False, on_epoch=True)
 
-        return {"test_loss": loss, "predictions": predictions, "targets": targets}
+        return {
+            "test_loss": loss,
+            "predictions": predictions,
+            "targets": targets,
+        }
 
     def configure_optimizers(self):
         """Configure optimizer and learning rate scheduler.
@@ -388,7 +409,9 @@ class BaseSequentialModel(pl.LightningModule, ABC):
             Dictionary containing model metadata
         """
         total_params = sum(p.numel() for p in self.parameters())
-        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        trainable_params = sum(
+            p.numel() for p in self.parameters() if p.requires_grad
+        )
 
         return {
             "model_name": self.__class__.__name__,

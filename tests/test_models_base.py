@@ -35,7 +35,9 @@ class TestModelConfig:
 
     def test_invalid_num_items(self):
         """Test that invalid num_items raises validation error."""
-        with pytest.raises(ValueError, match="ensure this value is greater than 0"):
+        with pytest.raises(
+            ValueError, match="ensure this value is greater than 0"
+        ):
             ModelConfig(num_items=0, max_seq_len=50, embedding_dim=128)
 
     def test_invalid_max_seq_len(self):
@@ -45,12 +47,16 @@ class TestModelConfig:
 
     def test_max_seq_len_too_large(self):
         """Test that max_seq_len exceeding limit raises validation error."""
-        with pytest.raises(ValueError, match="max_seq_len cannot exceed 10000"):
+        with pytest.raises(
+            ValueError, match="max_seq_len cannot exceed 10000"
+        ):
             ModelConfig(num_items=1000, max_seq_len=20000, embedding_dim=128)
 
     def test_embedding_dim_not_divisible_by_8(self):
         """Test warning when embedding_dim is not divisible by 8."""
-        with pytest.raises(ValueError, match="embedding_dim should be divisible by 8"):
+        with pytest.raises(
+            ValueError, match="embedding_dim should be divisible by 8"
+        ):
             ModelConfig(num_items=1000, max_seq_len=50, embedding_dim=127)
 
     def test_invalid_learning_rate(self):
@@ -59,7 +65,10 @@ class TestModelConfig:
             ValueError, match="ensure this value is less than or equal to 1.0"
         ):
             ModelConfig(
-                num_items=1000, max_seq_len=50, embedding_dim=128, learning_rate=2.0
+                num_items=1000,
+                max_seq_len=50,
+                embedding_dim=128,
+                learning_rate=2.0,
             )
 
     def test_optional_fields(self):
@@ -112,13 +121,23 @@ class TestBaseSequentialModel:
 
         # Check that embeddings are initialized
         assert hasattr(mock_model, "item_embeddings")
-        assert mock_model.item_embeddings.num_embeddings == valid_config.num_items + 1
-        assert mock_model.item_embeddings.embedding_dim == valid_config.embedding_dim
+        assert (
+            mock_model.item_embeddings.num_embeddings
+            == valid_config.num_items + 1
+        )
+        assert (
+            mock_model.item_embeddings.embedding_dim
+            == valid_config.embedding_dim
+        )
 
     def test_config_validation_failure(self):
         """Test that invalid configuration raises ValueError."""
         invalid_config = DictConfig(
-            {"num_items": -1, "max_seq_len": 50, "embedding_dim": 128}  # Invalid
+            {
+                "num_items": -1,
+                "max_seq_len": 50,
+                "embedding_dim": 128,
+            }  # Invalid
         )
 
         with pytest.raises(ValueError, match="Invalid model configuration"):
@@ -127,7 +146,9 @@ class TestBaseSequentialModel:
     def test_forward_pass(self, mock_model):
         """Test forward pass with valid input."""
         batch_size, seq_len = 4, 20
-        sequences = torch.randint(1, mock_model.num_items + 1, (batch_size, seq_len))
+        sequences = torch.randint(
+            1, mock_model.num_items + 1, (batch_size, seq_len)
+        )
 
         logits = mock_model(sequences)
 
@@ -137,7 +158,9 @@ class TestBaseSequentialModel:
     def test_forward_pass_with_padding(self, mock_model):
         """Test forward pass with padding tokens."""
         batch_size, seq_len = 4, 20
-        sequences = torch.randint(1, mock_model.num_items + 1, (batch_size, seq_len))
+        sequences = torch.randint(
+            1, mock_model.num_items + 1, (batch_size, seq_len)
+        )
 
         # Add padding tokens (0) to some positions
         sequences[:, -5:] = 0
@@ -150,7 +173,9 @@ class TestBaseSequentialModel:
     def test_predict_next_items(self, mock_model):
         """Test prediction generation."""
         batch_size, seq_len = 4, 20
-        sequences = torch.randint(1, mock_model.num_items + 1, (batch_size, seq_len))
+        sequences = torch.randint(
+            1, mock_model.num_items + 1, (batch_size, seq_len)
+        )
 
         k = 10
         predictions = mock_model.predict_next_items(sequences, k=k)
@@ -162,8 +187,12 @@ class TestBaseSequentialModel:
     def test_compute_loss(self, mock_model):
         """Test loss computation."""
         batch_size, seq_len = 4, 20
-        sequences = torch.randint(1, mock_model.num_items + 1, (batch_size, seq_len))
-        targets = torch.randint(1, mock_model.num_items + 1, (batch_size, seq_len))
+        sequences = torch.randint(
+            1, mock_model.num_items + 1, (batch_size, seq_len)
+        )
+        targets = torch.randint(
+            1, mock_model.num_items + 1, (batch_size, seq_len)
+        )
 
         logits = mock_model(sequences)
         loss = mock_model.compute_loss(logits, targets)
@@ -221,14 +250,21 @@ class TestBaseSequentialModel:
         optimizer = mock_model.configure_optimizers()
 
         assert hasattr(optimizer, "param_groups")
-        assert optimizer.param_groups[0]["lr"] == mock_model.config.learning_rate
         assert (
-            optimizer.param_groups[0]["weight_decay"] == mock_model.config.weight_decay
+            optimizer.param_groups[0]["lr"] == mock_model.config.learning_rate
+        )
+        assert (
+            optimizer.param_groups[0]["weight_decay"]
+            == mock_model.config.weight_decay
         )
 
     def test_configure_optimizers_with_scheduler(self, valid_config):
         """Test optimizer configuration with scheduler."""
-        valid_config.scheduler = {"type": "step", "step_size": 10, "gamma": 0.5}
+        valid_config.scheduler = {
+            "type": "step",
+            "step_size": 10,
+            "gamma": 0.5,
+        }
 
         model = MockSequentialModel(valid_config)
         config = model.configure_optimizers()
@@ -246,7 +282,9 @@ class TestBaseSequentialModel:
         assert predictions.shape == (2, 5)
 
         # Test with scores
-        predictions, scores = mock_model.predict(sequences, k=5, return_scores=True)
+        predictions, scores = mock_model.predict(
+            sequences, k=5, return_scores=True
+        )
         assert predictions.shape == (2, 5)
         assert scores.shape == (2, 5)
 

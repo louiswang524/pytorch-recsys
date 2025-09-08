@@ -47,15 +47,15 @@ jobs:
 
     - name: Lint with flake8
       run: |
-        flake8 pytorch_recsys tests
+        flake8 pytorch_recsys tests --max-line-length=79 --extend-ignore=E203,E501,W503
 
     - name: Check formatting with black
       run: |
-        black --check pytorch_recsys tests
+        black --check pytorch_recsys tests --line-length=79
 
     - name: Check import sorting with isort
       run: |
-        isort --check-only pytorch_recsys tests
+        isort --check-only pytorch_recsys tests --line-length=79
 
     - name: Type check with mypy
       run: |

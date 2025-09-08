@@ -20,7 +20,9 @@ def main(args: Optional[List[str]] = None) -> int:
     """
     parser = argparse.ArgumentParser(
         prog="pytorch-recsys",
-        description="PyTorch-based framework for sequential recommendation systems",
+        description=(
+            "PyTorch-based framework for sequential recommendation systems"
+        ),
     )
 
     parser.add_argument(
@@ -29,10 +31,14 @@ def main(args: Optional[List[str]] = None) -> int:
         version=f"pytorch-recsys-framework {__version__}",
     )
 
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+    subparsers = parser.add_subparsers(
+        dest="command", help="Available commands"
+    )
 
     # Info command
-    info_parser = subparsers.add_parser("info", help="Show framework information")
+    info_parser = subparsers.add_parser(
+        "info", help="Show framework information"
+    )
     info_parser.set_defaults(func=_info_command)
 
     # Parse arguments
@@ -51,7 +57,10 @@ def main(args: Optional[List[str]] = None) -> int:
 def _info_command(args: argparse.Namespace) -> int:
     """Show framework information."""
     print(f"PyTorch RecSys Framework v{__version__}")
-    print("A modular PyTorch-based framework for sequential recommendation systems")
+    print(
+        "A modular PyTorch-based framework for "
+        "sequential recommendation systems"
+    )
     print()
 
     try:
