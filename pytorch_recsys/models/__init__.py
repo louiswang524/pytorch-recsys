@@ -22,12 +22,10 @@ __all__: List[str] = [
     # Base interfaces
     "BaseSequentialModel",
     "ModelConfig",
-    
     # Registry system
-    "ModelRegistry", 
+    "ModelRegistry",
     "ModelMetadata",
     "create_model",
-    
     # Mock implementations
     "MockSequentialModel",
     "SimpleMockModel",

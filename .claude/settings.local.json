@@ -8,7 +8,13 @@
       "Bash(pytorch-recsys --version)",
       "Bash(black:*)",
       "Bash(flake8:*)",
-      "Bash(mypy:*)"
+      "Bash(mypy:*)",
+      "Bash(git push:*)",
+      "Bash(pip3 install:*)",
+      "Bash(PYTHONPATH=. python3 -c \"import pytorch_recsys; print(f''Package version: {pytorch_recsys.__version__}'')\")",
+      "Bash(PYTHONPATH=. python3 -c \"from pytorch_recsys.models import BaseSequentialModel, ModelRegistry; print(''Base models imported successfully''); print(f''Registry has {len(ModelRegistry._models)} registered models'')\")",
+      "Bash(gh repo view:*)",
+      "Bash(/dev/null)"
     ],
     "deny": [],
     "ask": []
