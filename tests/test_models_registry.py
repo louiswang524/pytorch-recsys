@@ -4,18 +4,19 @@ This module contains comprehensive tests for the ModelRegistry class,
 model registration, discovery, and instantiation functionality.
 """
 
+from unittest.mock import patch
+
 import pytest
 import torch
 from omegaconf import DictConfig
-from unittest.mock import patch
 
-from pytorch_recsys.models.registry import (
-    ModelRegistry,
-    ModelMetadata,
-    create_model,
-)
 from pytorch_recsys.models.base import BaseSequentialModel
 from pytorch_recsys.models.mock import MockSequentialModel, SimpleMockModel
+from pytorch_recsys.models.registry import (
+    ModelMetadata,
+    ModelRegistry,
+    create_model,
+)
 
 
 class DummyModel(BaseSequentialModel):

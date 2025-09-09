@@ -13,10 +13,10 @@ from typing import List
 
 # Import base classes and registry
 from .base import BaseSequentialModel, ModelConfig
-from .registry import ModelRegistry, ModelMetadata, create_model
 
 # Import mock models (this will trigger registration)
 from .mock import MockSequentialModel, SimpleMockModel
+from .registry import ModelMetadata, ModelRegistry, create_model
 
 __all__: List[str] = [
     # Base interfaces

@@ -10,11 +10,11 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional, Tuple, Union
 
-import torch
 import pytorch_lightning as pl
+import torch
 from omegaconf import DictConfig
-from torch import Tensor, nn
 from pydantic import BaseModel, Field, validator
+from torch import Tensor, nn
 
 
 class ModelConfig(BaseModel):

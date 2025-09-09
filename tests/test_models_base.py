@@ -4,10 +4,11 @@ This module contains comprehensive tests for the BaseSequentialModel abstract
 base class and its configuration validation system.
 """
 
+from unittest.mock import patch
+
 import pytest
 import torch
 from omegaconf import DictConfig
-from unittest.mock import patch
 
 from pytorch_recsys.models.base import BaseSequentialModel, ModelConfig
 from pytorch_recsys.models.mock import MockSequentialModel, SimpleMockModel

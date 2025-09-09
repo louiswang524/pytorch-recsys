@@ -14,13 +14,13 @@ __copyright__ = "Copyright 2024 Louis Wang"
 
 # Import main modules when available
 try:
-    from pytorch_recsys import data  # noqa: F401
-    from pytorch_recsys import models  # noqa: F401
-    from pytorch_recsys import layers  # noqa: F401
-    from pytorch_recsys import training  # noqa: F401
-    from pytorch_recsys import evaluation  # noqa: F401
-    from pytorch_recsys import serving  # noqa: F401
     from pytorch_recsys import configs  # noqa: F401
+    from pytorch_recsys import data  # noqa: F401
+    from pytorch_recsys import evaluation  # noqa: F401
+    from pytorch_recsys import layers  # noqa: F401
+    from pytorch_recsys import models  # noqa: F401
+    from pytorch_recsys import serving  # noqa: F401
+    from pytorch_recsys import training  # noqa: F401
     from pytorch_recsys import utils  # noqa: F401
 except ImportError:
     # Modules not yet implemented, this is expected during initial setup
