@@ -207,7 +207,9 @@ class MockSequentialModel(BaseSequentialModel):
         for i, pos in enumerate(last_positions):
             last_logits.append(logits[i, pos])
 
-        last_logits_tensor = torch.stack(last_logits)  # (batch_size, num_items + 1)
+        last_logits_tensor = torch.stack(
+            last_logits
+        )  # (batch_size, num_items + 1)
 
         # Exclude padding token (index 0) from predictions
         last_logits_tensor[:, 0] = float("-inf")

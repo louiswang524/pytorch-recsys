@@ -309,7 +309,9 @@ class BaseSequentialModel(pl.LightningModule, ABC):
             "targets": targets,
         }
 
-    def configure_optimizers(self) -> Union[torch.optim.Optimizer, Dict[str, Any]]:
+    def configure_optimizers(
+        self,
+    ) -> Union[torch.optim.Optimizer, Dict[str, Any]]:
         """Configure optimizer and learning rate scheduler.
 
         Returns:
@@ -340,7 +342,11 @@ class BaseSequentialModel(pl.LightningModule, ABC):
 
     def _create_scheduler(
         self, optimizer: torch.optim.Optimizer, config: Dict[str, Any]
-    ) -> Union[torch.optim.lr_scheduler.StepLR, torch.optim.lr_scheduler.CosineAnnealingLR, torch.optim.lr_scheduler.ReduceLROnPlateau]:
+    ) -> Union[
+        torch.optim.lr_scheduler.StepLR,
+        torch.optim.lr_scheduler.CosineAnnealingLR,
+        torch.optim.lr_scheduler.ReduceLROnPlateau,
+    ]:
         """Create learning rate scheduler from configuration.
 
         Args:
