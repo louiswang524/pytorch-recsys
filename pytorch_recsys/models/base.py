@@ -56,7 +56,7 @@ class ModelConfig(BaseModel):
     )
 
     @validator("max_seq_len")
-    def validate_max_seq_len(cls, v):
+    def validate_max_seq_len(cls, v: int) -> int:
         if v <= 0:
             raise ValueError("max_seq_len must be positive")
         if v > 10000:
@@ -66,7 +66,7 @@ class ModelConfig(BaseModel):
         return v
 
     @validator("embedding_dim")
-    def validate_embedding_dim(cls, v):
+    def validate_embedding_dim(cls, v: int) -> int:
         if v % 8 != 0:
             raise ValueError(
                 "embedding_dim should be divisible by 8 for optimal performance"
@@ -183,7 +183,7 @@ class BaseSequentialModel(pl.LightningModule, ABC):
             raise ValueError(f"Unsupported loss type: {loss_type}")
 
     @abstractmethod
-    def forward(self, sequences: Tensor, **kwargs) -> Tensor:
+    def forward(self, sequences: Tensor, **kwargs: Any) -> Tensor:
         """Forward pass of the model.
 
         Args:
@@ -309,7 +309,7 @@ class BaseSequentialModel(pl.LightningModule, ABC):
             "targets": targets,
         }
 
-    def configure_optimizers(self):
+    def configure_optimizers(self) -> Union[torch.optim.Optimizer, Dict[str, Any]]:
         """Configure optimizer and learning rate scheduler.
 
         Returns:
@@ -340,7 +340,7 @@ class BaseSequentialModel(pl.LightningModule, ABC):
 
     def _create_scheduler(
         self, optimizer: torch.optim.Optimizer, config: Dict[str, Any]
-    ) -> torch.optim.lr_scheduler._LRScheduler:
+    ) -> Union[torch.optim.lr_scheduler.StepLR, torch.optim.lr_scheduler.CosineAnnealingLR, torch.optim.lr_scheduler.ReduceLROnPlateau]:
         """Create learning rate scheduler from configuration.
 
         Args:

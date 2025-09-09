@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import inspect
 import logging
-from typing import Any, Dict, List, Optional, Type, Union
+from typing import Any, Callable, Dict, List, Optional, Type, Union
 
 from omegaconf import DictConfig
 from pydantic import BaseModel, Field
@@ -89,7 +89,7 @@ class ModelRegistry:
         version: str = "1.0.0",
         tags: Optional[List[str]] = None,
         requirements: Optional[Dict[str, str]] = None,
-    ):
+    ) -> Callable[[Type[BaseSequentialModel]], Type[BaseSequentialModel]]:
         """Decorator for registering models in the registry.
 
         Args:

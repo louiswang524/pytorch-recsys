@@ -8,6 +8,7 @@ a reference implementation for new model developers.
 from __future__ import annotations
 
 import torch
+from typing import Any, List
 from omegaconf import DictConfig
 from torch import Tensor, nn
 
@@ -115,7 +116,7 @@ class MockSequentialModel(BaseSequentialModel):
         nn.init.normal_(self.output_projection.weight, std=0.02)
         nn.init.zeros_(self.output_projection.bias)
 
-    def forward(self, sequences: Tensor, **kwargs) -> Tensor:
+    def forward(self, sequences: Tensor, **kwargs: Any) -> Tensor:
         """Forward pass of the mock model.
 
         Args:
@@ -202,17 +203,17 @@ class MockSequentialModel(BaseSequentialModel):
                 last_positions.append(0)  # If all padding, use position 0
 
         # Extract logits at last positions
-        last_logits = []
+        last_logits: List[Tensor] = []
         for i, pos in enumerate(last_positions):
             last_logits.append(logits[i, pos])
 
-        last_logits = torch.stack(last_logits)  # (batch_size, num_items + 1)
+        last_logits_tensor = torch.stack(last_logits)  # (batch_size, num_items + 1)
 
         # Exclude padding token (index 0) from predictions
-        last_logits[:, 0] = float("-inf")
+        last_logits_tensor[:, 0] = float("-inf")
 
         # Get top-k predictions
-        _, top_k_items = torch.topk(last_logits, k, dim=-1)
+        _, top_k_items = torch.topk(last_logits_tensor, k, dim=-1)
 
         return top_k_items
 
@@ -331,7 +332,7 @@ class SimpleMockModel(BaseSequentialModel):
         # Dropout
         self.dropout = nn.Dropout(config.get("dropout", 0.1))
 
-    def forward(self, sequences: Tensor, **kwargs) -> Tensor:
+    def forward(self, sequences: Tensor, **kwargs: Any) -> Tensor:
         """Simple forward pass."""
         # Get embeddings
         embeddings = self.item_embeddings(
