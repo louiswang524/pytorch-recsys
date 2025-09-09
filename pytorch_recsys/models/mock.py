@@ -7,8 +7,9 @@ a reference implementation for new model developers.
 
 from __future__ import annotations
 
-import torch
 from typing import Any, List
+
+import torch
 from omegaconf import DictConfig
 from torch import Tensor, nn
 

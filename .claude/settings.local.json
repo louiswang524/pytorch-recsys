@@ -15,7 +15,8 @@
       "Bash(PYTHONPATH=. python3 -c \"from pytorch_recsys.models import BaseSequentialModel, ModelRegistry; print(''Base models imported successfully''); print(f''Registry has {len(ModelRegistry._models)} registered models'')\")",
       "Bash(gh repo view:*)",
       "Bash(/dev/null)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(isort:*)"
     ],
     "deny": [],
     "ask": []
