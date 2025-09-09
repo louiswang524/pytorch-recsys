@@ -171,7 +171,7 @@ class MockSequentialModel(BaseSequentialModel):
         hidden_states = self.layer_norm(hidden_states)
 
         # Project to vocabulary size
-        logits = self.output_projection(hidden_states)
+        logits: Tensor = self.output_projection(hidden_states)
 
         # Mask out logits for padding tokens
         logits = logits * attention_mask.unsqueeze(-1)
@@ -240,7 +240,7 @@ class MockSequentialModel(BaseSequentialModel):
         targets_flat = targets.view(-1)  # (batch_size * seq_len,)
 
         # Compute cross-entropy loss (ignores padding tokens with index 0)
-        loss = self.loss_fn(logits_flat, targets_flat)
+        loss: Tensor = self.loss_fn(logits_flat, targets_flat)
 
         return loss
 
@@ -346,7 +346,7 @@ class SimpleMockModel(BaseSequentialModel):
         embeddings = self.dropout(embeddings)
 
         # Linear transformation to logits
-        logits = self.linear(
+        logits: Tensor = self.linear(
             embeddings
         )  # (batch_size, seq_len, num_items + 1)
 
@@ -372,4 +372,5 @@ class SimpleMockModel(BaseSequentialModel):
         logits_flat = logits.view(-1, logits.size(-1))
         targets_flat = targets.view(-1)
 
-        return self.loss_fn(logits_flat, targets_flat)
+        loss: Tensor = self.loss_fn(logits_flat, targets_flat)
+        return loss

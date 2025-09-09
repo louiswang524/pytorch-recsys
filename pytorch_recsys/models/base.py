@@ -149,7 +149,7 @@ class BaseSequentialModel(pl.LightningModule, ABC):
         try:
             # Convert OmegaConf to dict for Pydantic validation
             config_dict = dict(self.config)
-            ModelConfig(**config_dict)
+            ModelConfig.model_validate(config_dict)
         except Exception as e:
             raise ValueError(f"Invalid model configuration: {e}")
 
@@ -309,9 +309,7 @@ class BaseSequentialModel(pl.LightningModule, ABC):
             "targets": targets,
         }
 
-    def configure_optimizers(
-        self,
-    ) -> Union[torch.optim.Optimizer, Dict[str, Any]]:
+    def configure_optimizers(self) -> Any:
         """Configure optimizer and learning rate scheduler.
 
         Returns:
